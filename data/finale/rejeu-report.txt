@@ -1,0 +1,21 @@
+==============================================================================================================
+  LES 297 MEILLEURS CERVEAUX SUR LE VRAI BROKER (Bybit + IBKR, sans impôts, 2018-2026, sans évolution)
+==============================================================================================================
+Ces cerveaux ont évolué sur ces mêmes années : le résultat est flatté. Le vrai broker ajoute écart, impact, financement réel et minimums.
+
+  Bot actuel (BTC, ETH, SOL, NVDA, TSLA) : 1 000 -> 70 569 | années : 2018:x0.69 2019:x1.82 2020:x3.41 2021:x2.87 2022:x0.81 2023:x3.91 2024:x1.44 2025:x1.25 2026:x1.01
+  Bot actuel (BTC, ETH, SOL seulement)  : 1 000 -> 59 129 (ancien simulateur : 53 091) | trades/jour 0.17
+  Vivants à la fin : 135 sur 297 | au-dessus de 1 000 : 116 | au-dessus du bot : 25
+  Meilleure année d'un cerveau : x5536.6 | années à x1000 ou plus : 1
+
+  Les 10 meilleurs :
+    1 000 ->   36 725 380 | vivant | levier max x2.6 | 0.43 trades/jour | frais 1 515 132 + écart 503 105 + financement 15 965 627 | meilleure année x5536.6 | pire x0.40
+    1 000 ->    2 447 251 | vivant | levier max x3.0 | 0.32 trades/jour | frais 62 231 + écart 63 288 + financement 360 848 | meilleure année x120.0 | pire x0.97
+    1 000 ->    1 104 401 | vivant | levier max x3.7 | 0.10 trades/jour | frais 29 705 + écart 30 155 + financement 235 480 | meilleure année x77.0 | pire x0.57
+    1 000 ->      899 105 | vivant | levier max x2.9 | 0.10 trades/jour | frais 16 080 + écart 26 347 + financement 173 573 | meilleure année x88.3 | pire x0.32
+    1 000 ->      562 495 | vivant | levier max x1.0 | 0.14 trades/jour | frais 9 325 + écart 9 002 + financement 19 | meilleure année x4.0 | pire x0.81
+    1 000 ->      463 094 | vivant | levier max x1.0 | 0.20 trades/jour | frais 46 402 + écart 23 245 + financement 0 | meilleure année x105.4 | pire x0.65
+    1 000 ->      419 338 | vivant | levier max x1.0 | 0.14 trades/jour | frais 5 333 + écart 5 266 + financement 891 | meilleure année x60.6 | pire x0.32
+    1 000 ->      393 548 | vivant | levier max x1.0 | 0.15 trades/jour | frais 4 532 + écart 5 841 + financement 120 | meilleure année x4.5 | pire x0.73
+    1 000 ->      345 775 | vivant | levier max x2.6 | 0.07 trades/jour | frais 7 554 + écart 6 914 + financement 24 823 | meilleure année x9.4 | pire x0.29
+    1 000 ->      239 500 | vivant | levier max x1.0 | 0.07 trades/jour | frais 8 954 + écart 6 849 + financement 484 | meilleure année x48.5 | pire x0.55

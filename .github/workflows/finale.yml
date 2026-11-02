@@ -1,0 +1,43 @@
+name: finale
+on:
+  workflow_dispatch:
+jobs:
+  monde:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        world: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install numpy==2.5.4 requests
+      - run: python -m agent.finale monde ${{ matrix.world }} resultats
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: finale-${{ matrix.world }}
+          path: resultats/
+  rapport:
+    needs: monde
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install numpy==2.5.4 requests
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: finale-*
+          path: resultats
+          merge-multiple: true
+      - run: python -m agent.finale rapport resultats
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rapport-finale
+          path: resultats/
