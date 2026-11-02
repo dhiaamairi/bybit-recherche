@@ -1,0 +1,47 @@
+name: experiences
+on:
+  workflow_dispatch:
+jobs:
+  monde:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        exp: [4, 5]
+        world: [0, 1, 2, 3, 4, 5, 6, 7]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install numpy==2.5.4 requests
+      - run: python run_world.py ${{ matrix.exp }} ${{ matrix.world }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: exp${{ matrix.exp }}-monde${{ matrix.world }}
+          path: resultats/
+  rapport:
+    needs: monde
+    if: always()
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        exp: [4, 5]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install numpy==2.5.4 requests
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: exp${{ matrix.exp }}-monde*
+          path: resultats
+          merge-multiple: true
+      - run: python rapport.py ${{ matrix.exp }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rapport-exp${{ matrix.exp }}
+          path: resultats/
