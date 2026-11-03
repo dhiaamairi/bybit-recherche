@@ -1,0 +1,44 @@
+name: secondes
+on:
+  workflow_dispatch:
+jobs:
+  mois:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        mois: [2024-01, 2024-02, 2024-03, 2024-04, 2024-05, 2024-06, 2024-07, 2024-08, 2024-09,
+               2024-10, 2024-11, 2024-12, 2025-01, 2025-02, 2025-03, 2025-04, 2025-05, 2025-06]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install numpy==2.5.4 numba==0.68.1 requests
+      - run: python -m agent.secondes telecharger ${{ matrix.mois }} ${{ matrix.mois }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xau-${{ matrix.mois }}
+          path: data/xau/
+  test:
+    needs: mois
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install numpy==2.5.4 numba==0.68.1 requests
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: xau-*
+          path: data/xau
+          merge-multiple: true
+      - run: python -m agent.secondes tester 2024-01:2024-06 2024-07:2025-06
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rapport-secondes
+          path: data/xau/secondes-report.txt
