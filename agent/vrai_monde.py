@@ -399,7 +399,7 @@ class VraiMonde:
             n = psz * fait
             cout = (n * np.where(mk, 0.0, hs + impact)).sum(1)
             com = self._com(n, g, d, maker=self.b.maker)
-            self.eq -= cout + com
+            self.eq -= com                          # l'écart et l'impact sont déjà dans le prix d'entrée `px`
             self.gliss += cout
             self.frais += com
             side[:] = np.where(fait, pend, side)

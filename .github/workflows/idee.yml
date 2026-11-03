@@ -1,0 +1,41 @@
+name: idee
+on:
+  workflow_dispatch:
+jobs:
+  essai:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      matrix:
+        nom: [H-cible10-x1, H-cible20-x1, H-cible30-x1, H-cible10-x3, H-cible20-x3, H-cible30-x3,
+              P1-tendance-flux-croisee, P2-tendance-argent-croisee, P3-levier-x2-croisee, P4-levier-x3-croisee,
+              P5-tendance-prolongee, Q1-comite-bot-et-cerveaux, Q2-continu-croise, R1-arbitrage-financement]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: pip install numpy==2.5.4 numba==0.68.1 requests
+      - run: python -m agent.idee preparer
+      - run: python -m agent.idee_suite un ${{ matrix.nom }} 4000 30 resultats
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: idee-${{ matrix.nom }}
+          path: resultats/
+  rapport:
+    needs: essai
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: idee-*
+          path: resultats
+          merge-multiple: true
+      - run: cat resultats/*.txt > resultats/idee-report-github.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rapport-idee
+          path: resultats/

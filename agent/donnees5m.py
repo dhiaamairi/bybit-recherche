@@ -60,6 +60,29 @@ def _bougies(actif: str, y: int, m: int) -> np.ndarray | None:
     return a
 
 
+def _flux(actif: str, y: int, m: int) -> np.ndarray | None:
+    """Volume acheté par les ordres agressifs, en dollars : la part des acheteurs pressés dans chaque bougie."""
+    lignes = _lire(f"{BASE}/spot/monthly/klines/{actif}/5m/{actif}-5m-{y}-{m:02d}.zip")
+    if not lignes:
+        return None
+    if not lignes[0][0].isdigit():
+        lignes = lignes[1:]
+    a = np.array([[float(li[0]), float(li[10])] for li in lignes], dtype=np.float64)
+    a[:, 0] = np.where(a[:, 0] > 1e14, a[:, 0] / 1000, a[:, 0])
+    return a
+
+
+def telecharger_flux(actif: str, pool: ThreadPoolExecutor) -> str:
+    cible = DOSSIER / f"{actif}-flux.npz"
+    if not cible.exists():
+        morceaux = [p for p in pool.map(lambda ym, a=actif: _flux(a, *ym), mois()) if p is not None]
+        x = np.concatenate(morceaux)
+        x = x[np.argsort(x[:, 0], kind="stable")]
+        x = x[np.concatenate([[True], np.diff(x[:, 0]) > 0])]
+        np.savez_compressed(cible, ts=x[:, 0].astype(np.int64), tq=x[:, 1].astype(np.float32))
+    return f"{actif} : flux {cible.stat().st_size / 1e6:.1f} Mo"
+
+
 def _financement(actif: str, y: int, m: int) -> np.ndarray | None:
     lignes = _lire(f"{BASE}/futures/um/monthly/fundingRate/{actif}/{actif}-fundingRate-{y}-{m:02d}.zip")
     if not lignes:
@@ -91,6 +114,10 @@ def telecharger(actif: str, pool: ThreadPoolExecutor) -> str:
 if __name__ == "__main__":
     DOSSIER.mkdir(parents=True, exist_ok=True)
     with ThreadPoolExecutor(8) as ex:
-        for a in sys.argv[1:] or ACTIFS:
-            print(telecharger(a, ex), flush=True)
+        if sys.argv[1:] == ["flux"]:
+            for a in ACTIFS:
+                print(telecharger_flux(a, ex), flush=True)
+        else:
+            for a in sys.argv[1:] or ACTIFS:
+                print(telecharger(a, ex), flush=True)
     print("TERMINE", flush=True)
